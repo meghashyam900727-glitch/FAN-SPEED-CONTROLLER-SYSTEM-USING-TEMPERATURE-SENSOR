@@ -12,10 +12,8 @@
 	Temperature Sensor (DHT11/DHT22/TMP36)
 
 # Circuit Diagram:
+<img width="1920" height="1080" alt="Annotation 2025-09-16 010924" src="https://github.com/user-attachments/assets/382c16f0-7de0-4b4e-8d99-9dd853546b4c" />
 
----
-To upload
---
 
 # Procedure // Modify the procedure based on your circuit
 
@@ -56,13 +54,51 @@ Step 7: Save Your Work
 
 
 # Program
-
 ---
-To upload
---
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);  // I2C address might be 0x3F
+
+const int potPin = A2;
+const int motorPin = 9;
+const int ledPin = 13;
+
+int speedVal = 0;
+
+void setup() {
+  pinMode(motorPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Fan Controller");
+}
+
+void loop() {
+  int potValue = analogRead(potPin);      // 0–1023
+  speedVal = map(potValue, 0, 1023, 0, 255);  // Map to PWM (0–255)
+
+  analogWrite(motorPin, speedVal);  // DC motor speed
+  analogWrite(ledPin, speedVal);    // LED brightness
+
+  int speedPercent = map(speedVal, 0, 255, 0, 100);
+
+  lcd.setCursor(0, 1);
+  lcd.print("Speed: ");
+  lcd.print(speedPercent);
+  lcd.print(" %   ");  // Extra spaces to clear old text
+
+  delay(300);
+}
+---
+
+output
+
+
+https://github.com/user-attachments/assets/c5c2815c-0672-4a88-903d-0f94e989ac81
+
 
 # Result
 
----
-To upload
---
+<img width="1920" height="1080" alt="Annotation 2025-09-16 010409" src="https://github.com/user-attachments/assets/3272a7ef-3d09-4b77-a1f9-081dbcc12683" />
